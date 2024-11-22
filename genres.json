@@ -2,15 +2,28 @@
     "genres":[
         {
             "genreType": "pop",
+            "imgPath": "images/",
+            "description": ""
         },
         {
             "genreType": "rock",
+            "imgPath": "images/",
+            "description": ""
         },
         {
             "genreType": "electronic dance",
+            "imgPath": "images/",
+            "description": ""
         },
         {
-            "genreType": "rap"
+            "genreType": "country",
+            "imgPath": "images/",
+            "description": ""
+        },
+        {
+            "genreType": "rap",
+            "imgPath": "images/",
+            "description": ""
         }
     ]
 }
