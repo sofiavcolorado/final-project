@@ -2,7 +2,7 @@
     "genres":[
         {
             "genreType": "pop",
-            "imgPath": "images/",
+            "imgPath": "images/jersey shore.png",
             "description": ""
         },
         {
@@ -17,6 +17,11 @@
         },
         {
             "genreType": "country",
+            "imgPath": "images/",
+            "description": ""
+        },
+        {
+            "genreType": "classical",
             "imgPath": "images/",
             "description": ""
         },

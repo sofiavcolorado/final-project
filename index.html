@@ -14,48 +14,12 @@
     <title>Nichify</title>
 </head>
 <body>
-    <h1>Welcome to Nichify!</h1>
-
-    <div class="container">
-        <p>Based on your Spotify you are...</p>
+    <h1>Discover Your Top Genre</h1>
+    <div class="container" id="content">
+        <p id="message">Fetching your top genre...</p>
+        <img id="genre-image" src="" alt="Top Genre Image" style="display:none; max-width: 100%;">
     </div>
-
     
     <script src="script.js"></script>
-    <script>
-        async function displayGenreImage(topGenre) {
-            try {
-                const respone = await fetch('genres.json');
-                if(!response.ok) {
-                    throw new Error('Failed to fetch genres data');
-                }
-
-                const genresData = await respone.json();
-                const genre = genresData.genres.find(g => g.genreType.toLowerCase() === topGenre.toLowerCase());
-                const outputContainer = document.getElementById('output');
-                const imageContainer = document.getElementById('genre-image');
-     
-                if (genre) {
-                    outputContainer.innerText = `Your top genre is: ${genre.genreType}`;
-                    imageContainer.innerHTML = '';      
-                    const img = document.createElement('img');
-    
-                    img.src = genre.imgPath;
-                    img.alt = genre.genreType;
-                    imageContainer.appendChild(img);
-                    const desc = document.createElement('p');
-                    desc.innerText = genre.description;
-                    imageContainer.appendChild(desc);
-                } else {
-                    outputContainer.innerText = 'No image available for the top genre.';
-                    imageContainer.innerHTML = '';
-                }
-                } catch (error) {
-                    console.error('Error loading genres:', error);
-                    const outputContainer = document.getElementById('output');
-                outputContainer.innerText = 'Error loading genres data. Please try again later.';
-            }
-        }
-    </script>
 </body>
 </html>
