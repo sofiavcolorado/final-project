@@ -3,32 +3,26 @@
         {
             "genreType": "pop",
             "imgPath": "images/jersey shore.png",
-            "description": ""
         },
         {
             "genreType": "rock",
             "imgPath": "images/",
-            "description": ""
         },
         {
             "genreType": "electronic dance",
             "imgPath": "images/",
-            "description": ""
         },
         {
             "genreType": "country",
             "imgPath": "images/",
-            "description": ""
         },
         {
             "genreType": "classical",
             "imgPath": "images/",
-            "description": ""
         },
         {
             "genreType": "rap",
             "imgPath": "images/",
-            "description": ""
         }
     ]
 }
