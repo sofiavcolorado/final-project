@@ -1,8 +1,8 @@
 const clientId = '2cb9558f161945b991ab7f6159ebf38e';
-const redirectUri = 'http://127.0.0.1:5500/'; // temporary link to live server
+const redirectUri = 'http://127.0.0.1:5500/'; // Temporary local server URL
 const scopes = ['user-top-read'];
 
-// some code copied from Spotify for Developers but modified to work 
+// Generate a random string for the code verifier
 function generateRandomString(length) {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     return Array.from(crypto.getRandomValues(new Uint8Array(length)))
@@ -10,6 +10,7 @@ function generateRandomString(length) {
         .join('');
 }
 
+// Generate a code challenge from the code verifier
 async function generateCodeChallenge(verifier) {
     const encoder = new TextEncoder();
     const data = encoder.encode(verifier);
@@ -20,6 +21,7 @@ async function generateCodeChallenge(verifier) {
         .replace(/\//g, '_');
 }
 
+// Redirect to Spotify login
 async function redirectToSpotifyLogin() {
     const codeVerifier = generateRandomString(128);
     sessionStorage.setItem('code_verifier', codeVerifier);
@@ -32,6 +34,7 @@ async function redirectToSpotifyLogin() {
     window.location.href = authUrl;
 }
 
+// Get the access token from Spotify
 async function getAccessToken(authCode) {
     const codeVerifier = sessionStorage.getItem('code_verifier');
 
@@ -54,7 +57,8 @@ async function getAccessToken(authCode) {
     return await response.json();
 }
 
-async function fetchTopGenres(accessToken) {
+// Fetch the user's top genre
+async function fetchTopGenre(accessToken) {
     const response = await fetch('https://api.spotify.com/v1/me/top/artists?limit=50', {
         headers: { Authorization: `Bearer ${accessToken}` },
     });
@@ -70,18 +74,53 @@ async function fetchTopGenres(accessToken) {
 
     return Object.entries(genreCounts)
         .sort(([, a], [, b]) => b - a)
-        .map(([genre]) => genre);
+        .map(([genre]) => genre)[0]; // Return the top genre
 }
 
+// Display the genre image based on the top genre
+async function displayGenreImage(topGenre) {
+    try {
+        const response = await fetch('genres.json');
+        if (!response.ok) throw new Error('Failed to fetch genre mappings');
+
+        const genreMappings = await response.json();
+        console.log('Genre Mappings:', genreMappings);
+
+        const genreImage = genreMappings[topGenre];
+        if (genreImage) {
+            document.getElementById('message').textContent = `Your top genre is: ${topGenre}`;
+            const imageElement = document.getElementById('genre-image');
+            imageElement.src = genreImage;
+            imageElement.style.display = 'block';
+        } else {
+            throw new Error('No image found for the top genre');
+        }
+    } catch (error) {
+        console.error('Error Displaying Genre Image:', error);
+        document.getElementById('message').textContent = 'An error occurred while fetching the genre image.';
+    }
+}
+
+// Main function
 (async function main() {
     const urlParams = new URLSearchParams(window.location.search);
     const authCode = urlParams.get('code');
+    console.log('Authorization Code:', authCode);
 
-    if (!authCode) {
-        redirectToSpotifyLogin();
-    } else {
-        const { access_token } = await getAccessToken(authCode);
-        const topGenres = await fetchTopGenres(access_token);
-        console.log('Top Genres:', topGenres);
+    try {
+        if (!authCode) {
+            redirectToSpotifyLogin();
+        } else {
+            const { access_token } = await getAccessToken(authCode);
+            console.log('Access Token:', access_token);
+
+            const topGenre = await fetchTopGenre(access_token);
+            console.log('Top Genre:', topGenre);
+
+            await displayGenreImage(topGenre);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        document.getElementById('message').textContent = 'An error occurred. Please check the console for details.';
     }
 })();
