@@ -2,27 +2,31 @@
     "genres":[
         {
             "genreType": "pop",
-            "imgPath": "images/jersey shore.png",
+            "imgPath": "images/brat.png"
         },
         {
             "genreType": "rock",
-            "imgPath": "images/",
+            "imgPath": "images/2000emo.png"
         },
         {
             "genreType": "electronic dance",
-            "imgPath": "images/",
+            "imgPath": "images/jersey_shore.png"
         },
         {
             "genreType": "country",
-            "imgPath": "images/",
+            "imgPath": "images/overconsumption.png"
         },
         {
             "genreType": "classical",
-            "imgPath": "images/",
+            "imgPath": "images/old money.png"
+        },
+        {
+            "genreType": "classic rock",
+            "imgPath": "images/booktok.png"
         },
         {
             "genreType": "rap",
-            "imgPath": "images/",
+            "imgPath": "images/brainrot_central.png"
         }
     ]
 }
