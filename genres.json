@@ -1,32 +1,12 @@
 {
-    "genres":[
-        {
-            "genreType": "pop",
-            "imgPath": "images/brat.png"
-        },
-        {
-            "genreType": "rock",
-            "imgPath": "images/2000emo.png"
-        },
-        {
-            "genreType": "electronic dance",
-            "imgPath": "images/jersey_shore.png"
-        },
-        {
-            "genreType": "country",
-            "imgPath": "images/overconsumption.png"
-        },
-        {
-            "genreType": "classical",
-            "imgPath": "images/old money.png"
-        },
-        {
-            "genreType": "classic rock",
-            "imgPath": "images/booktok.png"
-        },
-        {
-            "genreType": "rap",
-            "imgPath": "images/brainrot_central.png"
-        }
-    ]
+    "genres": {
+            "pop": "images/brat.png",
+            "rock": "images/2000emo.png",
+            "electronic dance": "images/jersey_shore.png",
+            "country":"images/overconsumption.png",
+            "classical":"images/old money.png",
+            "classic rock":"images/booktok.png",
+            "rap": "images/brainrot_central.png",
+            "pov: indie": "images/brainrot_central.png"
+    }
 }

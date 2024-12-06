@@ -1,6 +1,8 @@
 const clientId = '2cb9558f161945b991ab7f6159ebf38e';
+const clientSecret = '90601657df9b4bcf9c201f15428b24b7';
 const redirectUri = 'http://127.0.0.1:5500/'; // Temporary local server URL
 const scopes = ['user-top-read'];
+const token = 'BQD8vV5CWQ89YhILGTDPJoZudjnKDy0BNI7KrcMfZ2sWhS9oEMjX3cRYCmV5ygc7oiJIVX4ooNQQoRVv5Hvjh_oG-_5rWLCLRYhwyl32kjJ2BieekT8';
 
 // Generate a random string for the code verifier
 function generateRandomString(length) {
@@ -43,6 +45,7 @@ async function getAccessToken(authCode) {
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: new URLSearchParams({
             client_id: clientId,
+            client_secret: clientSecret,
             grant_type: 'authorization_code',
             code: authCode,
             redirect_uri: redirectUri,
@@ -59,8 +62,9 @@ async function getAccessToken(authCode) {
 
 // Fetch the user's top genre
 async function fetchTopGenre(accessToken) {
+    console.log(accessToken)
     const response = await fetch('https://api.spotify.com/v1/me/top/artists?limit=50', {
-        headers: { Authorization: `Bearer ${accessToken}` },
+        headers: { Authorization: `Bearer ${accessToken}`, },
     });
 
     if (!response.ok) throw new Error('Failed to fetch top artists');
@@ -86,14 +90,17 @@ async function displayGenreImage(topGenre) {
         const genreMappings = await response.json();
         console.log('Genre Mappings:', genreMappings);
 
-        const genreImage = genreMappings[topGenre];
+        const genreImage = genreMappings["genres"][topGenre];
         if (genreImage) {
             document.getElementById('message').textContent = `Your top genre is: ${topGenre}`;
             const imageElement = document.getElementById('genre-image');
             imageElement.src = genreImage;
             imageElement.style.display = 'block';
         } else {
-            throw new Error('No image found for the top genre');
+            document.getElementById('message').textContent = `Your top genre is: ${topGenre}`;
+            const imageElement = document.getElementById('genre-image');
+            imageElement.src = "images/2000emo.png";
+            imageElement.style.display = 'block';
         }
     } catch (error) {
         console.error('Error Displaying Genre Image:', error);
@@ -103,22 +110,24 @@ async function displayGenreImage(topGenre) {
 
 // Main function
 (async function main() {
+
+    if (localStorage.getItem('test') == null) {
+        redirectToSpotifyLogin();
+        localStorage.setItem('test', 'true');
+    }
     const urlParams = new URLSearchParams(window.location.search);
     const authCode = urlParams.get('code');
     console.log('Authorization Code:', authCode);
 
     try {
-        if (!authCode) {
-            redirectToSpotifyLogin();
-        } else {
-            const { access_token } = await getAccessToken(authCode);
-            console.log('Access Token:', access_token);
+        const { access_token } = await getAccessToken(authCode);
+        console.log('Access Token:', access_token);
+        localStorage.removeItem('test');
 
-            const topGenre = await fetchTopGenre(access_token);
-            console.log('Top Genre:', topGenre);
+        const topGenre = await fetchTopGenre(access_token);
+        console.log('Top Genre:', topGenre);
 
-            await displayGenreImage(topGenre);
-        }
+        await displayGenreImage(topGenre);
     } catch (error) {
         console.error('Error:', error);
         document.getElementById('message').textContent = 'An error occurred. Please check the console for details.';
