@@ -2,7 +2,7 @@ const clientId = '2cb9558f161945b991ab7f6159ebf38e';
 const clientSecret = '90601657df9b4bcf9c201f15428b24b7';
 const redirectUri = 'http://127.0.0.1:5500/'; // Temporary local server URL
 const scopes = ['user-top-read'];
-const token = 'BQD8vV5CWQ89YhILGTDPJoZudjnKDy0BNI7KrcMfZ2sWhS9oEMjX3cRYCmV5ygc7oiJIVX4ooNQQoRVv5Hvjh_oG-_5rWLCLRYhwyl32kjJ2BieekT8';
+const token = 'BQD8vV5CWQ89YhILGTDPJoZudjnKDy0BNI7KrcMfZ2sWhS9oEMjX3cRYCmV5ygc7oiJIVX4ooNQQoRVv5Hvjh_oG-_5rWLCLRYhwyl32kjJ2BieekT8'; //access token is only valid for an hour
 
 // Generate a random string for the code verifier
 function generateRandomString(length) {
