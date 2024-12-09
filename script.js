@@ -99,7 +99,7 @@ async function displayGenreImage(topGenre) {
         } else {
             document.getElementById('message').textContent = `Your top genre is: ${topGenre}`;
             const imageElement = document.getElementById('genre-image');
-            imageElement.src = "images/2000emo.png";
+            imageElement.src = "images/brainrot_central.png";
             imageElement.style.display = 'block';
         }
     } catch (error) {
