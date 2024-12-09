@@ -17,6 +17,9 @@ h1{
     
 }
 #genre-image{
-    height: 500px;
+    height: 600px;
     width: auto;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }
