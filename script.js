@@ -1,7 +1,8 @@
 const clientId = '2cb9558f161945b991ab7f6159ebf38e';
 const clientSecret = '90601657df9b4bcf9c201f15428b24b7';
-const redirectU = 'https://sofiavcolorado.github.io/final-project/index.html'; // Temporary local server URL
+const redirectU = 'http://127.0.0.1:5500/'; // Temporary local server URL
 const scopes = ['user-top-read'];
+const token = 'BQD8vV5CWQ89YhILGTDPJoZudjnKDy0BNI7KrcMfZ2sWhS9oEMjX3cRYCmV5ygc7oiJIVX4ooNQQoRVv5Hvjh_oG-_5rWLCLRYhwyl32kjJ2BieekT8'; //access token is only valid for an hour
 
 // Generate a random string for the code verifier
 function generateRandomString(length) {
@@ -59,30 +60,11 @@ async function getAccessToken(authCode) {
     return await response.json();
 }
 
-// Refresh the access token using the refresh token
-async function refreshAccessToken(refreshToken) {
-    const response = await fetch('https://accounts.spotify.com/api/token', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams({
-            client_id: clientId,
-            client_secret: clientSecret,
-            grant_type: 'refresh_token',
-            refresh_token: refreshToken,
-        }),
-    });
-
-    const data = await response.json();
-    if (data.error) {
-        throw new Error(data.error_description);
-    }
-    return data.access_token; // Return the new access token
-}
-
 // Fetch the user's top genre
 async function fetchTopGenre(accessToken) {
+    console.log(accessToken)
     const response = await fetch('https://api.spotify.com/v1/me/top/artists?limit=50', {
-        headers: { Authorization: `Bearer ${accessToken}` },
+        headers: { Authorization: `Bearer ${accessToken}`, },
     });
 
     if (!response.ok) throw new Error('Failed to fetch top artists');
@@ -128,58 +110,26 @@ async function displayGenreImage(topGenre) {
 
 // Main function
 (async function main() {
-    // Check if the user has already authorized the app, otherwise redirect to Spotify login
+
     if (localStorage.getItem('test') == null) {
         redirectToSpotifyLogin();
         localStorage.setItem('test', 'true');
     }
-
     const urlParams = new URLSearchParams(window.location.search);
     const authCode = urlParams.get('code');
-    
-    if (!authCode) {
-        console.error('Authorization code is missing');
-        return;
-    }
-
     console.log('Authorization Code:', authCode);
 
     try {
-        // If there is an access token in localStorage, use it
-        let accessToken = localStorage.getItem('access_token');
-        let refreshToken = localStorage.getItem('refresh_token');
+        const { access_token } = await getAccessToken(authCode);
+        console.log('Access Token:', access_token);
+        localStorage.removeItem('test');
 
-        if (!accessToken) {
-            const { access_token, refresh_token } = await getAccessToken(authCode);
-            console.log('Access Token:', access_token);
-            localStorage.setItem('access_token', access_token);
-            localStorage.setItem('refresh_token', refresh_token);
-            accessToken = access_token; // Store for future use
-        }
-
-        const topGenre = await fetchTopGenre(accessToken);
+        const topGenre = await fetchTopGenre(access_token);
         console.log('Top Genre:', topGenre);
 
         await displayGenreImage(topGenre);
     } catch (error) {
         console.error('Error:', error);
-
-        // Check if token expired, and try to refresh it
-        const accessToken = localStorage.getItem('access_token');
-        const refreshToken = localStorage.getItem('refresh_token');
-        if (accessToken && refreshToken) {
-            try {
-                const newAccessToken = await refreshAccessToken(refreshToken);
-                localStorage.setItem('access_token', newAccessToken);
-                console.log('Access Token refreshed:', newAccessToken);
-                
-                const topGenre = await fetchTopGenre(newAccessToken);
-                await displayGenreImage(topGenre);
-            } catch (refreshError) {
-                console.error('Error refreshing token:', refreshError);
-            }
-        } else {
-            document.getElementById('message').textContent = 'An error occurred. Please check the console for details.';
-        }
+        document.getElementById('message').textContent = 'An error occurred. Please check the console for details.';
     }
 })();
