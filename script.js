@@ -1,6 +1,6 @@
 const clientId = '2cb9558f161945b991ab7f6159ebf38e';
 const clientSecret = '90601657df9b4bcf9c201f15428b24b7';
-const redirectU = 'http://127.0.0.1:5500/'; // Temporary local server URL
+const redirectUri = 'http://127.0.0.1:5500/'; // Temporary local server URL
 const scopes = ['user-top-read'];
 const token = 'BQD8vV5CWQ89YhILGTDPJoZudjnKDy0BNI7KrcMfZ2sWhS9oEMjX3cRYCmV5ygc7oiJIVX4ooNQQoRVv5Hvjh_oG-_5rWLCLRYhwyl32kjJ2BieekT8'; //access token is only valid for an hour
 
@@ -30,7 +30,7 @@ async function redirectToSpotifyLogin() {
 
     const codeChallenge = await generateCodeChallenge(codeVerifier);
     const authUrl = `https://accounts.spotify.com/authorize?response_type=code&client_id=${clientId}&redirect_uri=${encodeURIComponent(
-        redirectU
+        redirectUri
     )}&scope=${encodeURIComponent(scopes.join(' '))}&code_challenge_method=S256&code_challenge=${codeChallenge}`;
 
     window.location.href = authUrl;
@@ -48,7 +48,7 @@ async function getAccessToken(authCode) {
             client_secret: clientSecret,
             grant_type: 'authorization_code',
             code: authCode,
-            redirect_uri: redirectU,
+            redirect_uri: redirectUri,
             code_verifier: codeVerifier,
         }),
     });
@@ -110,19 +110,18 @@ async function displayGenreImage(topGenre) {
 
 // Main function
 (async function main() {
-
-    if (localStorage.getItem('test') == null) {
-        redirectToSpotifyLogin();
-        localStorage.setItem('test', 'true');
-    }
     const urlParams = new URLSearchParams(window.location.search);
     const authCode = urlParams.get('code');
+
+    if (authCode == null) {
+        redirectToSpotifyLogin();
+    }
+    
     console.log('Authorization Code:', authCode);
 
     try {
         const { access_token } = await getAccessToken(authCode);
         console.log('Access Token:', access_token);
-        localStorage.removeItem('test');
 
         const topGenre = await fetchTopGenre(access_token);
         console.log('Top Genre:', topGenre);
