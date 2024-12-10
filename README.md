@@ -6,3 +6,5 @@ First download the live server extension.
 Second open the directory in your workspace.
 Click the go live button on the lower right hand corner.
 Log in using you Spotify crednetials (since the app is in development mode using Spotify API you must first get approval from the developer)
+
+Youtube video link: https://youtu.be/s-uBbrk3U1g
