@@ -1,6 +1,6 @@
 const clientId = '2cb9558f161945b991ab7f6159ebf38e';
 const clientSecret = '90601657df9b4bcf9c201f15428b24b7';
-const redirectUri = 'https://sofiavcolorado.github.io/final-project/'; // Temporary local server URL
+const redirectU = 'https://sofiavcolorado.github.io/final-project/index.html'; // Temporary local server URL
 const scopes = ['user-top-read'];
 const token = 'BQD8vV5CWQ89YhILGTDPJoZudjnKDy0BNI7KrcMfZ2sWhS9oEMjX3cRYCmV5ygc7oiJIVX4ooNQQoRVv5Hvjh_oG-_5rWLCLRYhwyl32kjJ2BieekT8'; //access token is only valid for an hour
 
@@ -30,7 +30,7 @@ async function redirectToSpotifyLogin() {
 
     const codeChallenge = await generateCodeChallenge(codeVerifier);
     const authUrl = `https://accounts.spotify.com/authorize?response_type=code&client_id=${clientId}&redirect_uri=${encodeURIComponent(
-        redirectUri
+        redirectU
     )}&scope=${encodeURIComponent(scopes.join(' '))}&code_challenge_method=S256&code_challenge=${codeChallenge}`;
 
     window.location.href = authUrl;
@@ -48,7 +48,7 @@ async function getAccessToken(authCode) {
             client_secret: clientSecret,
             grant_type: 'authorization_code',
             code: authCode,
-            redirect_uri: redirectUri,
+            redirect_uri: redirectU,
             code_verifier: codeVerifier,
         }),
     });
