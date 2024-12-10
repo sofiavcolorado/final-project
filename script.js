@@ -69,6 +69,7 @@ async function fetchTopGenre(accessToken) {
 
     if (!response.ok) throw new Error('Failed to fetch top artists');
 
+    // Fetches top genre based on the top artists main genres
     const data = await response.json();
     const genres = data.items.flatMap(artist => artist.genres);
     const genreCounts = genres.reduce((counts, genre) => {
@@ -92,11 +93,13 @@ async function displayGenreImage(topGenre) {
 
         const genreImage = genreMappings["genres"][topGenre];
         if (genreImage) {
+            // Displays image associated with the genre in json file
             document.getElementById('message').textContent = `Your top genre is: ${topGenre}`;
             const imageElement = document.getElementById('genre-image');
             imageElement.src = genreImage;
             imageElement.style.display = 'block';
         } else {
+            // Displays the "default" option if users top genre is not in json file
             document.getElementById('message').textContent = `Your top genre is: ${topGenre}`;
             const imageElement = document.getElementById('genre-image');
             imageElement.src = "images/brainrot_central.png";
@@ -113,6 +116,7 @@ async function displayGenreImage(topGenre) {
     const urlParams = new URLSearchParams(window.location.search);
     const authCode = urlParams.get('code');
 
+    // if the authorization code for spotify is not "local" then the user will have to log in
     if (authCode == null) {
         redirectToSpotifyLogin();
     }
