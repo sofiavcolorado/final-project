@@ -1,6 +1,6 @@
 body{
-    background-color: #284B63;
-    color: #EEF0EB;
+    background-color: #d0ccd0;
+    color: #00356b;
 }
 h1{
     text-align: center;
@@ -22,4 +22,14 @@ h1{
     display: block;
     margin-left: auto;
     margin-right: auto;
+}
+#all{
+    display: block;
+    margin: auto;
+    background-color: #00356b;
+    color: white;
+}
+#all:hover{
+    background-color: #b9d9eb;
+    color: black;
 }
